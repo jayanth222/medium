@@ -17,6 +17,7 @@ export const blogRouter = new Hono<{
 
 
 blogRouter.use('/*', async (c, next) => {
+    console.log("inside middleware")
     const authHeader = c.req.header('authorization') || "";
     if (!authHeader) {
         c.status(401);
@@ -98,14 +99,25 @@ blogRouter.put('/put', async (c) => {
 })
 
 
-//Todo add pagination
+
 blogRouter.get('/bulk', async (c) => {
-    const body = await c.req.json();
+    console.log("inside backend route");
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
     try {
-        const blogs = await prisma.post.findMany();
+        const blogs = await prisma.post.findMany({
+            select:{
+                content: true,
+                title: true,
+                id: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
         return c.json({
             blogs
         })
