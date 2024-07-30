@@ -16,24 +16,24 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     try {
       const response = await axios.post(
         `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
-        postInputs
+        postInputs,
       );
       let jwt = response.data.jwt;
-      jwt="Bearer "+jwt;
+      jwt = "Bearer " + jwt;
       localStorage.setItem("token", jwt);
       navigate("/blogs");
     } catch (e) {
-        console.error(e);
-        return;
+      console.error(e);
+      return;
     }
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center gap-4">
+    <div className="flex h-screen flex-col items-center justify-center gap-4">
       <div className="flex flex-col">
-        <div className="font-bold text-4xl text-center">Create an Account</div>
+        <div className="text-center text-4xl font-bold">Create an Account</div>
         <div className="flex gap-x-2 text-slate-500">
-          <div className="text-lg text-center">
+          <div className="text-center text-lg">
             {type === "signup"
               ? "Already have an account?"
               : "Don't have an account"}
@@ -83,7 +83,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
       <button
         onClick={sendRequest}
         type="button"
-        className="text-white bg-gray-800 w-96 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+        className="mb-2 me-2 w-96 rounded-lg bg-green-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500"
       >
         {type === "signup" ? "Sign Up" : "Sign In"}
       </button>
@@ -105,10 +105,10 @@ function LabelledInput({
   type,
 }: LabelledInputType) {
   return (
-    <div className="flex flex-col gap-2 w-96">
+    <div className="flex w-96 flex-col gap-2">
       <label className="text-md font-bold">{label}</label>
       <input
-        className="w-full border rounded py-2 px-3 focus:outline-none focus:border-blue-500 focus:shadow-outline"
+        className="focus:shadow-outline w-full rounded border px-3 py-2 focus:border-green-500 focus:outline-none"
         onChange={onChange}
         type={type || "text"}
         placeholder={placeholder}

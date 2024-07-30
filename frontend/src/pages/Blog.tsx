@@ -10,9 +10,11 @@ export const Blog = () => {
     id: id || " ",
   });
   if (loading) {
-    return <div className="flex flex-col max-w-screen-md mx-auto mt-20">
-      <BlogSkeleton />
-    </div>
+    return (
+      <div className="mx-auto mt-20 flex max-w-screen-md flex-col">
+        <BlogSkeleton />
+      </div>
+    );
   }
   if (blog === undefined) {
     return <div>Error Try Again</div>;

@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { Hono } from "hono";
 import { verify } from "hono/jwt";
-import {createBlogInput,updateBlogInput} from "@jayanth_222/medium-common"
+import { createBlogInput, updateBlogInput } from "@jayanth_222/medium-common"
 
 export const blogRouter = new Hono<{
     Bindings: {
@@ -17,7 +17,6 @@ export const blogRouter = new Hono<{
 
 
 blogRouter.use('/*', async (c, next) => {
-    console.log("inside middleware")
     const authHeader = c.req.header('authorization') || "";
     if (!authHeader) {
         c.status(401);
@@ -37,10 +36,10 @@ blogRouter.use('/*', async (c, next) => {
 
 blogRouter.post('/post', async (c) => {
     const body = await c.req.json();
-    const { success }=createBlogInput.safeParse(body);
-    if(!success){
+    const { success } = createBlogInput.safeParse(body);
+    if (!success) {
         c.status(411);
-        return c.json({error: "incorrect inputs"});
+        return c.json({ error: "incorrect inputs" });
     }
     const userId = c.get("userId");
     const prisma = new PrismaClient({
@@ -67,10 +66,10 @@ blogRouter.post('/post', async (c) => {
 
 blogRouter.put('/put', async (c) => {
     const body = await c.req.json();
-    const { success }=updateBlogInput.safeParse(body);
-    if(!success){
+    const { success } = updateBlogInput.safeParse(body);
+    if (!success) {
         c.status(411);
-        return c.json({error: "incorrect inputs"});
+        return c.json({ error: "incorrect inputs" });
     }
     const userId = c.get("userId");
     const prisma = new PrismaClient({
@@ -107,7 +106,7 @@ blogRouter.get('/bulk', async (c) => {
     }).$extends(withAccelerate())
     try {
         const blogs = await prisma.post.findMany({
-            select:{
+            select: {
                 content: true,
                 title: true,
                 id: true,
@@ -139,12 +138,12 @@ blogRouter.get('/:id', async (c) => {
             where: {
                 id
             },
-            select : {
+            select: {
                 id: true,
                 title: true,
                 content: true,
                 author: {
-                    select:  {
+                    select: {
                         name: true,
                     }
                 }
